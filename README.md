@@ -38,3 +38,7 @@ npm run dev -- --mod survival-mode
 ```
 
 Restart the game after a save. The console should show `loaded — jump velocity -380`.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md).
