@@ -2,11 +2,7 @@ import { isEnabled } from "@modkit/utils";
 import { modinfo } from "./modinfo";
 import { installDebugHealBinding, loadHealth } from "./health/health";
 import { installHazardHooks } from "./hazards/hazards";
-import {
-  applySurvivalMovementRules,
-  installMovementHooks,
-  JUMP_VELOCITY,
-} from "./movement/movement";
+import { applySurvivalMovementRules, installMovementHooks } from "./movement/movement";
 import { HealthHud } from "./ui/HealthHud";
 
 const api = sandkit.api;
@@ -36,5 +32,3 @@ function boot() {
 }
 
 api.events.on("game:ready", boot);
-
-console.log(`loaded — jump velocity ${JUMP_VELOCITY}`);
