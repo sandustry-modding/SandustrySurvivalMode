@@ -25,10 +25,6 @@ type HitboxPlayer = {
   height: number;
 };
 
-function isSurvivalActive(): boolean {
-  return isEnabled(api);
-}
-
 function isGamePaused(): boolean {
   const session = sandkit.state.session as { paused?: boolean };
   return session.paused === true;
@@ -87,7 +83,7 @@ function tickHazards() {
 
 export function installHazardHooks(): () => void {
   const stopFrame = api.events.on("frame:render", () => {
-    if (!isSurvivalActive()) {
+    if (!isEnabled()) {
       clearHazardSpriteEffect();
       return;
     }

@@ -18,7 +18,7 @@ function registerUi() {
 let booted = false;
 
 function boot() {
-  if (!isEnabled(api)) return;
+  if (!isEnabled()) return;
   if (booted) return;
   booted = true;
 

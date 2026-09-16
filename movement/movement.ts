@@ -79,10 +79,6 @@ function sessionInput(): SessionInput["input"] | null {
   return session.input ?? null;
 }
 
-function isSurvivalActive(): boolean {
-  return isEnabled(api);
-}
-
 function readMaxStepCells(): number {
   const value = api.settings.get("maxStepCells");
   if (typeof value !== "number" || !Number.isFinite(value)) return AUTO_STEP_CELLS;
@@ -155,7 +151,7 @@ function clearVerticalBoost() {
 }
 
 function applyRunSpeed() {
-  if (!isSurvivalActive()) return;
+  if (!isEnabled()) return;
 
   const session = sandkit.state.session as {
     movementSpeedMultiplier?: number;
@@ -228,7 +224,7 @@ function applyExtraGravity(dt: number) {
 }
 
 export function applySurvivalMovementRules(): void {
-  if (!isSurvivalActive()) return;
+  if (!isEnabled()) return;
   forceGroundMode();
   clearVerticalBoost();
   applyRunSpeed();
@@ -236,19 +232,19 @@ export function applySurvivalMovementRules(): void {
 
 export function installMovementHooks(): () => void {
   const stopBoostDown = api.hooks.intercept("input:boostDown", (_args, context) => {
-    if (!isSurvivalActive()) return;
+    if (!isEnabled()) return;
     cancelInputIntercept(context as InterceptContext);
     bufferJumpPress();
     tryJump();
   });
 
   const stopDescendDown = api.hooks.intercept("input:descendDown", (_args, context) => {
-    if (!isSurvivalActive()) return;
+    if (!isEnabled()) return;
     cancelInputIntercept(context as InterceptContext);
   });
 
   const stopHoverKey = api.hooks.intercept("input:keyDown", (args, context) => {
-    if (!isSurvivalActive()) return;
+    if (!isEnabled()) return;
     const payload = args as KeydownArgs;
     if (keyMatchesBinding(KeyBinding.Hover, payload.key, payload.code)) {
       cancelInputIntercept(context as InterceptContext);
@@ -261,12 +257,12 @@ export function installMovementHooks(): () => void {
   });
 
   const stopCollision = api.events.on("player:collision:prepare", (payload) => {
-    if (!isSurvivalActive()) return;
+    if (!isEnabled()) return;
     payload.maxStepCells = readMaxStepCells();
   });
 
   const stopMoved = api.events.on("player:moved", (payload) => {
-    if (!isSurvivalActive()) {
+    if (!isEnabled()) {
       resetFallDamage();
       return;
     }
@@ -291,7 +287,7 @@ export function installMovementHooks(): () => void {
   });
 
   const stopFrame = api.events.on("frame:render", () => {
-    if (!isSurvivalActive()) return;
+    if (!isEnabled()) return;
     forceGroundMode();
     clearVerticalBoost();
     applyRunSpeed();

@@ -58,7 +58,7 @@ export function installDebugHealBinding(): void {
     category: modinfo.name,
     handlers: {
       down: () => {
-        if (!isEnabled(sandkit.api)) return;
+        if (!isEnabled()) return;
         setHealth(HEALTH_MAX);
       },
     },
